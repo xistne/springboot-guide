@@ -3,3 +3,7 @@
 *.zip
 
 .idea/*.xml
+.DS_Store
+._.DS_Store
+**/.DS_Store
+**/._.DS_Store
