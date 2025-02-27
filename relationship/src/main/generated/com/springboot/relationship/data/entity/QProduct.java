@@ -35,6 +35,8 @@ public class QProduct extends EntityPathBase<Product> {
 
     public final QProductDetail productDetail;
 
+    public final QProvider provider;
+
     public final NumberPath<Integer> stock = createNumber("stock", Integer.class);
 
     //inherited
@@ -59,6 +61,7 @@ public class QProduct extends EntityPathBase<Product> {
     public QProduct(Class<? extends Product> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
         this.productDetail = inits.isInitialized("productDetail") ? new QProductDetail(forProperty("productDetail"), inits.get("productDetail")) : null;
+        this.provider = inits.isInitialized("provider") ? new QProvider(forProperty("provider")) : null;
     }
 
 }
