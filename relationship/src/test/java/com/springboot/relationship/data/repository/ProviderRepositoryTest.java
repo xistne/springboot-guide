@@ -90,6 +90,32 @@ public class ProviderRepositoryTest {
         providerRepository.save(provider);
     }
 
+    @Test
+    @Transactional
+    void orphanRemovalTest() {
+        Provider provider = saveProvider("새로운 공급업체");
+
+        Product product1 = saveProduct("상품1", 1000, 1000);
+        Product product2 = saveProduct("상품2", 500, 1500);
+        Product product3 = saveProduct("상품3", 750, 500);
+
+        product1.setProvider(provider);
+        product2.setProvider(provider);
+        product3.setProvider(provider);
+
+        provider.getProductList().addAll(Lists.newArrayList(product1, product2, product3));
+
+        providerRepository.saveAndFlush(provider);
+
+        providerRepository.findAll().forEach(System.out::println);
+        productRepository.findAll().forEach(System.out::println);
+
+        Provider foundProvider = providerRepository.findById(1L).get();
+        foundProvider.getProductList().remove(0);
+
+        providerRepository.findAll().forEach(System.out::println);
+        productRepository.findAll().forEach(System.out::println);
+    }
     private Provider saveProvider(String name) {
         Provider provider = new Provider();
         provider.setName(name);
