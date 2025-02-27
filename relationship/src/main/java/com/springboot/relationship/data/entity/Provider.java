@@ -3,6 +3,9 @@ package com.springboot.relationship.data.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Getter
 @Setter
@@ -17,4 +20,8 @@ public class Provider extends BaseEntity {
     private Long id;
 
     private String name;
+
+    @OneToMany(mappedBy = "provider", fetch = FetchType.EAGER)
+    @ToString.Exclude
+    private List<Product> productList = new ArrayList<>();
 }
