@@ -33,6 +33,8 @@ public class QProduct extends EntityPathBase<Product> {
 
     public final NumberPath<Integer> price = createNumber("price", Integer.class);
 
+    public final ListPath<Producer, QProducer> producers = this.<Producer, QProducer>createList("producers", Producer.class, QProducer.class, PathInits.DIRECT2);
+
     public final QProductDetail productDetail;
 
     public final QProvider provider;
