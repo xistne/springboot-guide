@@ -27,6 +27,11 @@ public class ExceptionController {
         throw new RuntimeException("getRuntimeException 메서드 호출");
     }
 
+    @GetMapping("/custom")
+    public void getCustomException() throws CustomException {
+        throw new CustomException(Constants.ExceptionClass.PRODUCT, HttpStatus.BAD_REQUEST, "getCustomException 메서드 호출");
+    }
+
     @ExceptionHandler(value= RuntimeException.class)
     public ResponseEntity<Map<String, String>> handlerException(RuntimeException e, HttpServletRequest request) {
         HttpHeaders responseHeaders = new HttpHeaders();
