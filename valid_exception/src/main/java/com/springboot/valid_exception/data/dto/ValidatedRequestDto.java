@@ -1,5 +1,6 @@
 package com.springboot.valid_exception.data.dto;
 
+import com.springboot.valid_exception.config.annotation.Telephone;
 import com.springboot.valid_exception.data.group.ValidationGroup1;
 import com.springboot.valid_exception.data.group.ValidationGroup2;
 import jakarta.validation.constraints.*;
@@ -18,7 +19,7 @@ public class ValidatedRequestDto {
     @Email
     String email;
 
-    @Pattern(regexp = "01(?:0|1|[6-9])[.-]?(\\d{3}|\\d{4})[.-]?(\\d{4})$")
+    @Telephone
     String phoneNumber;
 
     @Min(value = 20, groups = ValidationGroup1.class)
