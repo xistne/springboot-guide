@@ -27,4 +27,32 @@ public class ValidationController {
         LOGGER.info(validRequestDto.toString());
         return ResponseEntity.status(HttpStatus.OK).body(validRequestDto.toString());
     }
+
+    @PostMapping("/validated")
+    public ResponseEntity<String> checkValidation(
+            @Validated @RequestBody ValidatedRequestDto validatedRequestDto) {
+        LOGGER.info(validatedRequestDto.toString());
+        return ResponseEntity.status(HttpStatus.OK).body(validatedRequestDto.toString());
+    }
+
+    @PostMapping("/validated/group1")
+    public ResponseEntity<String> checkValidation1(
+            @Validated(ValidationGroup1.class) @RequestBody ValidatedRequestDto validatedRequestDto){
+        LOGGER.info(validatedRequestDto.toString());
+        return ResponseEntity.status(HttpStatus.OK).body(validatedRequestDto.toString());
+    }
+
+    @PostMapping("/validated/group2")
+    public ResponseEntity<String> checkValidation2(
+            @Validated(ValidationGroup2.class) @RequestBody ValidatedRequestDto validatedRequestDto){
+        LOGGER.info(validatedRequestDto.toString());
+        return ResponseEntity.status(HttpStatus.OK).body(validatedRequestDto.toString());
+    }
+
+    @PostMapping("/validated/all-group")
+    public ResponseEntity<String> checkValidation3(
+            @Validated({ValidationGroup1.class, ValidationGroup2.class}) @RequestBody ValidatedRequestDto validatedRequestDto){
+        LOGGER.info(validatedRequestDto.toString());
+        return ResponseEntity.status(HttpStatus.OK).body(validatedRequestDto.toString());
+    }
 }
