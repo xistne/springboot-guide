@@ -2,6 +2,7 @@ package com.springboot.rest.controller;
 
 import com.springboot.rest.dto.MemberDto;
 import com.springboot.rest.service.RestTemplateService;
+import com.springboot.rest.service.WebClientService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,9 +14,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class RestTemplateController {
 
     private final RestTemplateService restTemplateService;
+    private final WebClientService webClientService;
 
-    public RestTemplateController(RestTemplateService restTemplateService) {
+    public RestTemplateController(RestTemplateService restTemplateService, WebClientService webClientService) {
         this.restTemplateService = restTemplateService;
+        this.webClientService = webClientService;
     }
 
     @GetMapping
@@ -35,7 +38,7 @@ public class RestTemplateController {
 
     @PostMapping
     public ResponseEntity<MemberDto> postDto() {
-        return this.restTemplateService.postWithParamAndBody();
+        return this.webClientService.postWithParamAndBody();
     }
 
     @PostMapping("/header")
