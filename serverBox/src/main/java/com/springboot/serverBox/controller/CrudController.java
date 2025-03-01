@@ -11,7 +11,7 @@ public class CrudController {
 
     @GetMapping
     public String getName() {
-
+        return "Flature";
     }
 
     @GetMapping(value = "/{variable}")
