@@ -10,8 +10,6 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import java.io.IOException;
-
 @Configuration
 public class SecurityConfiguration {
     private final JwtTokenProvider jwtTokenProvider;
@@ -32,9 +30,16 @@ public class SecurityConfiguration {
                         .disable())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/sign-api/sign-in", "/sign-api/sign-up",
-                                        "/sign-api/exception").permitAll()
+                                "/sign-api/exception").permitAll()
                         .requestMatchers(HttpMethod.GET, "/product/**").permitAll()
-                        .requestMatchers("**exception**").permitAll()
+                        .requestMatchers("/**exception**").permitAll()
+                        .requestMatchers(
+                                "/v3/api-docs/**",  // Swagger 3.x API 문서 엔드포인트
+                                "/swagger-ui/**",   // Swagger UI 기본 경로
+                                "/swagger-resources/**",
+                                "/webjars/**",
+                                "/sign-api/exception"
+                        ).permitAll()
                         .anyRequest().hasRole("ADMIN"))
                 .exceptionHandling(ex -> {
                             ex.accessDeniedHandler(new CustomAccessDeniedHandler());
