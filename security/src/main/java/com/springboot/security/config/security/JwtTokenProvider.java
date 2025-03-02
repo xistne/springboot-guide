@@ -1,8 +1,6 @@
 package com.springboot.security.config.security;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jws;
-import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletRequest;
@@ -37,20 +35,25 @@ public class JwtTokenProvider {
     protected void init() {
         LOGGER.info("[init] JwtTokenProvider 내 secretKey 초기화 시작");
 //        secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes(StandardCharsets.UTF_8));
+        if (secretKey == null || secretKey.isBlank()) {
+            throw new IllegalStateException("secretKey가 설정되지 않았습니다!");
+        }
         key = Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8));
         LOGGER.info("[init] JwtTokenProvider 내 secretKey 초기화 완료");
     }
 
     public String createToken(String userUid, List<String> roles) {
         LOGGER.info("[createToken] 토큰 생성 시작");
-        Claims claims = Jwts.claims().subject(userUid).build();
-        claims.put("roles", roles);
+        ClaimsBuilder claims = Jwts.claims().subject(userUid);
+        claims.add("roles", roles);
         Date now = new Date();
 
         String token = Jwts.builder()
-                .claims(claims)
+                .claims(claims.build())
+                .subject(userUid)
                 .issuedAt(now)
                 .expiration(new Date(now.getTime() + tokenValidMillisecond))
+                .signWith(SignatureAlgorithm.HS256, key)
                 .compact();
 
         LOGGER.info("[createToken] 토큰 생성 완료");
@@ -83,7 +86,7 @@ public class JwtTokenProvider {
             Jws<Claims> claims = Jwts.parser().verifyWith(key).build().parseSignedClaims(token);
             return !claims.getPayload().getExpiration().before(new Date());
         } catch (Exception e) {
-            LOGGER.info("[validateToken] 토큰 유효 체크 예외 발생");
+            LOGGER.info("[validateToken] 토큰 유효 체크 예외 발생 : ");
             return false;
         }
     }
